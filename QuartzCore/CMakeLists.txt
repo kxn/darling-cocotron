@@ -36,6 +36,7 @@ set(QuartzCore_sources
 	CAMediaTimingFunction.m
 	CAPropertyAnimation.m
 	CARenderer.m
+	CARenderServer.m
 	CATransactionGroup.m
 	CATransaction.m
 	CATransform3D.m
@@ -125,3 +126,16 @@ target_include_directories(QuartzCore PUBLIC
 target_include_directories(QuartzCore PRIVATE
 	private-include
 )
+
+# A headless extension for an externally supplied native QuartzCore. It defines
+# only Cocotron's CALayerContext and sends the public renderInContext: message;
+# it does not import/reexport a second CALayer implementation.
+option(DARLING_NATIVE_LAYER_CONTEXT_EXTENSION "Build the native CALayer bitmap context extension" OFF)
+if(DARLING_NATIVE_LAYER_CONTEXT_EXTENSION)
+    set(DYLIB_INSTALL_NAME "/usr/lib/libDarlingNativeLayerContext.dylib")
+    add_darling_library(DarlingNativeLayerContext SHARED CALayerContextNative.m)
+    target_include_directories(DarlingNativeLayerContext PRIVATE include ../CoreGraphics/include)
+    target_link_libraries(DarlingNativeLayerContext PRIVATE Foundation CoreGraphics objc system)
+    make_fat(DarlingNativeLayerContext)
+    install(TARGETS DarlingNativeLayerContext DESTINATION libexec/darling/usr/lib)
+endif()

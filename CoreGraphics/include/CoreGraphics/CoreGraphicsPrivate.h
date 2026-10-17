@@ -43,6 +43,9 @@ extern CGError CGSNewConnection(_Nullable CGSDictionaryObj attribs, CGSConnectio
 extern CGError CGSReleaseConnection(CGSConnectionID connId);
 extern CGSConnectionID _CGSDefaultConnection(void);
 extern CGSConnectionID CGSMainConnectionID(void);
+// The accelerator port is borrowed from the client cache; do not release it.
+extern CGError CGSAcceleratorForDisplayNumber(CGDirectDisplayID display,
+        io_service_t *accelerator, uint32_t *framebufferIndex);
 extern CGError CGSSetDenyWindowServerConnections(Boolean deny);
 extern void CGSShutdownServerConnections(void);
 

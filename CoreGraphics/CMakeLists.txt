@@ -67,6 +67,10 @@ include_directories(
 )
 
 set(CoreGraphics_sources
+	CGFloat.c
+	CGImageIOConstants.c
+	CGContextNativeLayer.m
+	CGSAccelerator.c
 	CGAffineTransform.m
 	CGBitmapContext.m
 	CGColor.m
@@ -111,6 +115,9 @@ set(CoreGraphics_sources
 )
 
 set_source_files_properties(${CoreGraphics_sources} LANGUAGE C)
+# Keep Objective-C syntax explicit for the context-state category even when
+# CMake's LANGUAGE C policy adds an explicit language flag.
+set_property(SOURCE CGContextNativeLayer.m APPEND PROPERTY COMPILE_FLAGS "-x objective-c")
 
 set(DYLIB_COMPAT_VERSION "64.0.0")
 set(DYLIB_CURRENT_VERSION "1070.22.0")
